@@ -1,22 +1,27 @@
-# DEPENDENCIES
+# DEPENDENCIAS (Bibliotecas)
+# ----------------------------------------------------------------------------------------------------
 import os
 import sys
+
+# DEPENDENCIAS (Locales)
+# ----------------------------------------------------------------------------------------------------
 from model import Model
 
-# MAIN FUNCTIONS
+# FUNCIONES PRINCIPALES
+# ----------------------------------------------------------------------------------------------------
 
-# Given a list of examples, predict its classification using default model
+# Dada una lista de ejemplos, predecir su clasificacion en base al modelo por defecto
 def predict(examples):
 
-    # 1. Create model
+    # 1. Crear modelo
     print('(CLASSIFIER) Creating model...')
     model = Model()
 
-    # 2. Load classifier
+    # 2. Cargar clasificador
     print('(CLASSIFIER) Loading model...')
     model.load()
 
-    # 3. Make prediction
+    # 3. Calcular prediccion
     prediction = model.predict(examples)
     print('(CLASSIFIER) Prediction obtained (' + str(prediction) + ')')
 
@@ -24,9 +29,9 @@ def predict(examples):
 
 if __name__ == "__main__":
 
-    # 1. Get text from args
+    # 1. Obtener texto de parametro
     text = sys.argv[1]
     texts = [text]
 
-    # 2. Predict category
+    # 2. Predecir categoria
     main_prediction = predict(texts)

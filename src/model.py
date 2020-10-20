@@ -1,4 +1,5 @@
-# DEPENDENCIES
+# DEPENDENCIAS (Bibliotecas)
+# ----------------------------------------------------------------------------------------------------
 import time
 import pickle
 import pandas as pd
@@ -13,59 +14,60 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from vectorization.vectorizer import Vectorizer
+
+# DEPENDENCIAS (Locales)
+# ----------------------------------------------------------------------------------------------------
 import util.const as const
 
-# MAIN CLASS
+# CLASE PRINCIPAL
+# ----------------------------------------------------------------------------------------------------
 class Model():
-    '''
-    Model representation
-    '''
 
-    # Create dataset in csv format
+    # Leer dataset de archivo CSV
     def read_dataset(self):
 
-        # Read dataset as Pandas DataFrame
+        # Leer dataset en pandas dataframe
         df = pd.read_csv(self.data_path + const.DATA_TRAIN_FILE)
 
-        # Shuffle dataset before spliting columns
+        # Mezclar dataset aleatoriamente
         df = df.sample(frac=1)
 
-        # Save dataframe, get train dataset and train categories
+        # Guardar dataset en clase, separar ejemplos y categorias
         self.dataframe = df        
-        self.dataset = df['text'].values.astype('U')
-        self.categories = df['humor'].values
+        self.dataset = df['texto'].values.astype('U')
+        self.categories = df['odio'].values
 
-        # Read dataset as Pandas DataFrame
+        # Read testset as Pandas DataFrame
         df_test = pd.read_csv(self.data_path + const.DATA_TEST_FILE)
 
-        # Shuffle dataset before spliting columns
+        # Mezclar testset aleatoriamente
         df_test = df_test.sample(frac=1)
 
-        # Save dataframe, get train dataset and train categories
+        # Guardar testset en clase, separar ejemplos y categorias
         self.test_dataframe = df_test            
         self.test_dataset = df_test['text'].values.astype('U')
         self.test_categories = df_test['humor'].values
 
-    # Vectorize texts for input to model
+    # Vectorizar dataset para que el modelo pueda procesarlo
     def vectorize_dataset(self):
         
-        # Create vectorizer interface
+        # Crear interfaz de vectorizacion
         self.vectorizer = Vectorizer(self.vectorization)
         
-        # If vectorization type is embeddings, vectorize using dataframe and then extract
+        # Para vectorizacion de embeddings, procesar dataframe y dataset
         if self.vectorization == const.VECTORIZERS['word_embeddings']:
             self.dataframe = self.vectorizer.fit(self.dataframe)
-            self.dataset = list(np.array(self.dataframe['text'], dtype=object))
+            self.dataset = list(np.array(self.dataframe['texto'], dtype=object))
         
         # If not, vectorize numpy array
         else:
             self.dataset = self.vectorizer.fit(self.dataset)
 
-    # Aux function - For saving classifier
+    # Funcion Auxiliar - Guardar modelo en archivo
     def save(self):
         pickle.dump(self.classifier, open(const.MODEL_FOLDER + const.MODEL_FILE, 'wb'))
 
-    # Aux function - For loading classifier
+    # Funcion Auxiliar - Cargar modelo de archivo
     def load(self):
         self.classifier = pickle.load(open(const.MODEL_FOLDER + const.MODEL_FILE, 'rb'))
 

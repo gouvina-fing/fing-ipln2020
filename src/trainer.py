@@ -1,21 +1,27 @@
-# DEPENDENCIES
+# DEPENDENCIAS (Bibliotecas)
+# ----------------------------------------------------------------------------------------------------
 import os
 import sys
+
+# DEPENDENCIAS (Locales)
+# ----------------------------------------------------------------------------------------------------
 from model import Model
 
-# MAIN FUNCTIONS
+# FUNCIONES PRINCIPALES
+# ----------------------------------------------------------------------------------------------------
 
-# Train a model
+# Entrenar un clasificador
 def train():
-    # 1. Create model
+
+    # 1. Crear modelo
     print('(TRAINER) Creating model...')    
     model = Model()
 
-    # 2. Train classifier
+    # 2. Entrenar clasificador
     print('(TRAINER) Training model...')
     model.train()
 
-    # 3. Save classifier
+    # 3. Guardar clasificador
     print('(TRAINER) Saving model...')
     model.save()
 
