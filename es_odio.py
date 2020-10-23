@@ -23,7 +23,7 @@ from model import Model
 
 #
 best_solution = {
-    'vectorization': const.VECTORIZERS['word_embeddings'],
+    'vectorization': const.VECTORIZERS['features'],
     'model': 'mlp_classifier',
     'params': {
         'activation': 'relu',
@@ -52,7 +52,7 @@ def read_input():
 def run_test(model, path, test_file):
     
     # Lectura de conjunto de test
-    df_test = pd.read_csv(path + test_file)
+    df_test = pd.read_csv(path + test_file, sep='|', engine='python', quotechar='"', error_bad_lines=False)
     
     # Ejecucion de modelo sobre conjunto de test
     predictions = model.predict(df_test['texto'].values.astype('U'))

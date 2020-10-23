@@ -13,6 +13,9 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+# DEPENDENCIAS (Locales)
+# ----------------------------------------------------------------------------------------------------
 from vectorization.vectorizer import Vectorizer
 
 # DEPENDENCIAS (Locales)
@@ -27,7 +30,7 @@ class Model():
     def read_dataset(self):
 
         # Leer dataset en pandas dataframe
-        df = pd.read_csv(self.data_path + const.DATA_TRAIN_FILE)
+        df = pd.read_csv(self.data_path + const.DATA_TRAIN_FILE, sep='|', engine='python', quotechar='"', error_bad_lines=False)
 
         # Mezclar dataset aleatoriamente
         df = df.sample(frac=1)
@@ -38,15 +41,15 @@ class Model():
         self.categories = df['odio'].values
 
         # Read testset as Pandas DataFrame
-        df_test = pd.read_csv(self.data_path + const.DATA_TEST_FILE)
+        df_test = pd.read_csv(self.data_path + const.DATA_TEST_FILE, sep='|', engine='python', quotechar='"', error_bad_lines=False)
 
         # Mezclar testset aleatoriamente
         df_test = df_test.sample(frac=1)
 
         # Guardar testset en clase, separar ejemplos y categorias
         self.test_dataframe = df_test            
-        self.test_dataset = df_test['text'].values.astype('U')
-        self.test_categories = df_test['humor'].values
+        self.test_dataset = df_test['texto'].values.astype('U')
+        self.test_categories = df_test['odio'].values
 
     # Vectorizar dataset para que el modelo pueda procesarlo
     def vectorize_dataset(self):
@@ -54,12 +57,12 @@ class Model():
         # Crear interfaz de vectorizacion
         self.vectorizer = Vectorizer(self.vectorization)
         
-        # Para vectorizacion de embeddings, procesar dataframe y dataset
-        if self.vectorization == const.VECTORIZERS['word_embeddings']:
+        # Para vectorizacion de embeddings, procesar dataframe completo y dataset
+        if self.vectorization == const.VECTORIZERS['embeddings']:
             self.dataframe = self.vectorizer.fit(self.dataframe)
             self.dataset = list(np.array(self.dataframe['texto'], dtype=object))
-        
-        # If not, vectorize numpy array
+
+        # Para vectorizacion de features, procesar solo dataset
         else:
             self.dataset = self.vectorizer.fit(self.dataset)
 
@@ -74,32 +77,32 @@ class Model():
     # Constructor
     def __init__(self, vectorization=const.VECTORIZERS['features'], model='mlp_classifier', data_path=const.DATA_FOLDER, params={}):
 
-        # Create empty dataset for training
+        # Dataset vacio para entrenar
         self.dataset = None
         self.categories = None
 
-        # Create empty testset for evaluation
+        # Testset vacio para evaluar
         self.test_dataset = None
         self.test_categories = None
 
-        # Create other empty objects
+        # Interfaces auxiliares
         self.dataframe = None        
         self.classifier = None
         self.vectorizer = None
 
-        # Create other configuration values
+        # Valores de configuracion
         self.model = params['model'] if 'model' in params else model
         self.vectorization = params['vectorization'] if 'vectorization' in params else vectorization
         self.params = params['params'] if 'params' in params else None
         self.data_path = data_path
         
-        # Read dataset and categories
+        # Leer dataset, ejemplos y categorias
         self.read_dataset()
 
-        # Vectorize dataset and save vectorizer
+        # Vectorizar dataset y guardar vectorizador
         self.vectorize_dataset()
 
-    # Create and train classifier depending on chosen model
+    # Crear y entrenar clasificador segun modelo elegido
     def train(self, grid_search=False):
 
         # If grid search is setted, train testing each param depending on the chosen model
@@ -163,14 +166,14 @@ class Model():
             print(f'(MODEL) Best score for {self.model}: (Score: {self.classifier.best_score_})')
             print('')
 
-    # Predict classification for X using classifier
+    # Predecir clasificacion para conjunto X
     def predict(self, X):
         
         # Vectorize text
         examples = self.vectorizer.transform(X)
 
-        if self.vectorization == const.VECTORIZERS['word_embeddings']:
-            examples = np.array(examples['text'], dtype=object)
+        if self.vectorization == const.VECTORIZERS['embeddings']:
+            examples = np.array(examples['texto'], dtype=object)
             examples = list(map(lambda a: np.zeros(300) if len(a) != 300 else a,examples))
 
         # Generate classification and probabilities for every class
@@ -178,14 +181,14 @@ class Model():
 
         return prediction
 
-    # Generate evaluation depending of type
+    # Generar evaluacion dependiendo del tipo
     def evaluate(self):
         return self.normal_evaluate()
 
-    # Generate normal evaluation
+    # Generar evaluacion normal para parametros elegidos
     def normal_evaluate(self):
 
-        if self.vectorization == const.VECTORIZERS['word_embeddings']:
+        if self.vectorization == const.VECTORIZERS['embeddings']:
             prediction = self.predict(self.test_dataframe)
         else:
             prediction = self.predict(self.test_dataset)
@@ -203,7 +206,7 @@ class Model():
 
         return accuracy, report, report_string, matrix
 
-    # Generate parameter space for model
+    # Generar evaluacion cruzada explorado en espacio de parametros
     def grid_search_evaluate(self):
         parameter_space = {}
         if self.model == 'svm':

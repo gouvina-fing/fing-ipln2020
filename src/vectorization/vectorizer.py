@@ -1,60 +1,62 @@
-# DEPENDENCIES
+# DEPENDENCIAS (Bibliotecas)
+# ---------------------------------------------------------------
 from sklearn.decomposition import PCA
 from sklearn.feature_extraction import DictVectorizer
+
+# DEPENDENCIAS (Locales)
+# ----------------------------------------------------------------------------------------------------
 import vectorization.features_vectorizer as features_vectorizer
 import vectorization.embeddings_vectorizer  as embeddings_vectorizer
 import util.const as const
 
-# MAIN CLASS
+# CLASE PRINCIPAL
+# ----------------------------------------------------------------------------------------------------
 class Vectorizer():
-    '''
-    Vectorizer interface
-    '''
 
     # Constructor
-    def __init__(self, vectorization=const.VECTORIZERS['word_embeddings']):
+    def __init__(self, vectorization=const.VECTORIZERS['embeddings']):
 
         # Type of vectorizer
         self.type = vectorization
 
-        # Empty objects
+        # Interfaces auxiliares
         self.vectorizer = None
         self.dictionary = None
 
-        # Depending on vectorization type, initializes different objects
+        # Dependiendo del tipo de vectorización, inicializa distintas interfaces
         if self.type == const.VECTORIZERS['features']:
             self.vectorizer = DictVectorizer()
-        if self.type == const.VECTORIZERS['word_embeddings']:
+        if self.type == const.VECTORIZERS['embeddings']:
             self.dictionary = embeddings_vectorizer.get_dictionary()
 
-    # Given a set X, vectorizes it and saves used vectorizer
+    # Dado un conjunto de ejemplos X, adapta el vectorizador al mismo y vectoriza X
     def fit(self, X):
 
         vectorized = []
 
-        # If vectorization is by features, uses feature extraction and DictVectorizer
+        # Extrae features y los vectoriza con DictVectorizer
         if self.type == const.VECTORIZERS['features']:
             featurized = features_vectorizer.get_features(X)
             vectorized = self.vectorizer.fit_transform(featurized)
 
-        # If vectorization is by word embeddings, uses word embeddings dictionary and mean
-        if self.type == const.VECTORIZERS['word_embeddings']:
+        # Traduce a embeddings y calcula vector promedio
+        if self.type == const.VECTORIZERS['embeddings']:
             vectorized = embeddings_vectorizer.get_vectors(X, self.dictionary)
 
         return vectorized
 
-    # Given a set X, vectorizes it using last vectorizer
+    # Dado un conjunto de ejemplos X, utilizando el vectorizador preadaptado, vectoriza X
     def transform(self, X):
         
         vectorized = []      
 
-        # If vectorization is by features, uses feature extraction and DictVectorizer        
+        # Extrae features y los vectoriza con DictVectorizer     
         if self.type == const.VECTORIZERS['features']:
             featurized = features_vectorizer.get_features(X)
             vectorized = self.vectorizer.transform(featurized)
 
-        # If vectorization is by word embeddings, uses word embeddings dictionary and mean        
-        if self.type == const.VECTORIZERS['word_embeddings']:
+        # Traduce a embeddings y calcula vector promedio     
+        if self.type == const.VECTORIZERS['embeddings']:
             vectorized = embeddings_vectorizer.get_vectors(X, self.dictionary)
 
         return vectorized

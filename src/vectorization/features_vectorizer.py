@@ -1,16 +1,16 @@
-# DEPENDENCIES
+# DEPENDENCIAS (Bibliotecas)
+# ---------------------------------------------------------------
 import re
 import math
 import numpy as np
 
-# AUX FUNCTIONS
+# CONSTANTES
+# ----------------------------------------------------------------------------------------------------
 
-# Read file as a dict
+# Lee archivo como diccionario
 def read_dictionary(filename):
     with open(filename) as dictionary:
         return {word.rstrip('\n') for word in dictionary if word.rstrip('\n')}
-
-# CONSTANTS
 
 dialogue_punctuation = ['-', '—', '–', '―', '‒', '‐', '−', '­', '‑', '⁃', '֊', '˗', '⁻', '⏤', '─', '➖']
 
@@ -42,15 +42,52 @@ hasthag_regex = re.compile(r'(\B#\w+)')
 
 exclamation_regex = re.compile(r'(\b¡\w*!\b|!\b)')
 
-# MAIN FUNCTIONS
+# FUNCIONES AUXILIARES
+# ----------------------------------------------------------------------------------------------------
 
-# Given a list of tweets, return a list of dicts with each tweet's features
+# Determina si el tweet comienza con un simbolo de dialogo
+def starts_with_dialogue(tweet):
+    for punctuation in dialogue_punctuation:
+        if tweet.startswith(punctuation):
+            return 1
+    return 0
+
+# Cuenta la cantidad de ocurrencias de una regex en un tweet
+def number_of_regex_occurrences(regex, tweet):
+    return len(re.findall(regex, tweet))
+
+# Cuenta la cantidad de ocurrencias de un conjunto de palabras en un tweet
+def ratio_of_word_ocurrences(word_dictionary, tweet):
+    number_of_occurrences = 0
+    tweet = tweet.lower()
+    words = tweet.split(' ')
+    for word in words:
+        if word in word_dictionary:
+            number_of_occurrences += 1
+    return number_of_occurrences / math.sqrt(len(words))
+
+# Cuenta la cantidad de palabras totalmente en mayúsculas, dividido la cantidad de palabras del tweet.
+def capslock_ratio(tweet):
+    number_of_word_or_numbers = len(re.findall(word_or_number_regex, tweet))
+    number_of_capslock_words = len(re.findall(capslock_word_regex, tweet))
+
+    if number_of_word_or_numbers == 0:
+        return 0
+    else:
+        return number_of_capslock_words / number_of_word_or_numbers
+
+
+# FUNCIONES PRINCIPALES
+# ----------------------------------------------------------------------------------------------------
+
+# Dada una lista de tweets, retorna una lista de dicts con los features de cada tweet
 def get_features(tweets):
     return np.vectorize(extract_features)(tweets)
 
-# Given a tweet, return a dict with its features
+# Dado un tweet, retorna un dict con los features del mismo
 def extract_features(tweet):
-    # Convert every whitespace character to ' ' and collapse multiple whitespaces to one.
+
+    # Convertir cada espacio en ' ' y colapsar muchos espacios en uno.
     tweet = re.sub('\s+', ' ', tweet).strip()
 
     downcased_tweet = tweet.lower()
@@ -71,36 +108,3 @@ def extract_features(tweet):
     features['capslock_ratio'] = capslock_ratio(tweet)
     
     return features
-
-# AUX FUNCTIONS
-
-# Determines if tweet starts with any dialogue symbol
-def starts_with_dialogue(tweet):
-    for punctuation in dialogue_punctuation:
-        if tweet.startswith(punctuation):
-            return 1
-    return 0
-
-# Counts the number of groups when finding by a specific regex in the tweet
-def number_of_regex_occurrences(regex, tweet):
-    return len(re.findall(regex, tweet))
-
-# Counts the number of occurrences of a specific list in the tweet
-def ratio_of_word_ocurrences(word_dictionary, tweet):
-    number_of_occurrences = 0
-    tweet = tweet.lower()
-    words = tweet.split(' ')
-    for word in words:
-        if word in word_dictionary:
-            number_of_occurrences += 1
-    return number_of_occurrences / math.sqrt(len(words))
-
-# Cuenta la cantidad de palabras totalmente en mayúsculas, dividido la cantidad de palabras del tweet.
-def capslock_ratio(tweet):
-    number_of_word_or_numbers = len(re.findall(word_or_number_regex, tweet))
-    number_of_capslock_words = len(re.findall(capslock_word_regex, tweet))
-
-    if number_of_word_or_numbers == 0:
-        return 0
-    else:
-        return number_of_capslock_words / number_of_word_or_numbers

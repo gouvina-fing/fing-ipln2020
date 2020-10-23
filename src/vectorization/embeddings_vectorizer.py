@@ -1,51 +1,56 @@
-# DEPENDENCIES
+# DEPENDENCIAS (Bibliotecas)
+# ---------------------------------------------------------------
 import sys
 import pandas as pd
 import numpy as np
 import statistics
-import util.const as const
 import re
 from tokenizer import tokenize
 
-# MAIN FUNCTIONS
+# DEPENDENCIAS (Locales)
+# ----------------------------------------------------------------------------------------------------
+import util.const as const
 
-# Given a list of tweets and an embedding dictionary,
-# returns a list of vectors representing each tweet
+# FUNCIONES PRINCIPALES
+# ----------------------------------------------------------------------------------------------------
+
+# Dada una lista de tweets y un diccionario, devuelve lista de tweets vectorizados
 def get_vectors(tweets, dictionary):
-    tweets['text'] = tweets['text'].apply(convert_tweet_to_embedding, embeddings=dictionary)
+    tweets['texto'] = tweets['texto'].apply(convert_tweet_to_embedding, embeddings=dictionary)
     return tweets
 
-# Return word embeddings as dictionary
+# Devuelve diccionario de embeddings
 def get_dictionary():
     dicc = {}
 
-    # Read file as Pandas DataFrame
+    # Lectura de archivo de embeddings como pandas DataFrame
     df_test = pd.read_csv(const.DATA_FOLDER + const.EMBEDDINGS_FILE, engine='python', sep='\s+', header=None) 
 
-    # Get words and embeddings values
+    # Obtener palabras y valores de embeddings
     rows = df_test.shape[0] - 1
     words = df_test.loc[0:rows, 0]
     df = df_test.loc[0:rows, 1:300]
 
-    # Replace NaN and inf with 0
+    # Reemplazar NaN e inf con 0
     df[df==np.inf] = np.nan
     df.fillna(0)
 
-    # Fill dicc with every word
+    # Llenar diccionario con cada palabra
     for index, row in df.iterrows():
         if not(words[index] in dicc.keys()):
             dicc[words[index]] = row.values
     
     return dicc
 
-# AUX FUNCTIONS
+# FUNCIONES AUXILIARES
+# ----------------------------------------------------------------------------------------------------
 
-# Given a tweet and an embedding dictionary, return an embedding vector representing the tweet
+# Dado un tweet y un diccionario, devuelve el tweet como un vector media de los vectores de cada palabra
 def convert_tweet_to_embedding(tweet, embeddings):
     words = np.array(tokenize_text(tweet), dtype=object)
     return mean_of_tweet_embedding(words, embeddings)
 
-# Given a text, tokenize it returning a list of words
+# Dado un texto, lo devuelve como una lista de palabras tokenizadas
 def tokenize_text(text):
 
     # Erase non alphanumerical characters
@@ -56,17 +61,17 @@ def tokenize_text(text):
     words = [ token.txt for token in tokenize(text) if token.txt is not None]
     return words
 
-# Given a list of words and an embedding dictionary, return an embedding vector representing the list of words
+# Dada una lista de palabras y un diccionario, devuelve un vector media representando la lista de palabras
 def mean_of_tweet_embedding(words, embeddings):
     data = pd.Series(words)
     data = data.apply(token_to_embedding, embeddings=embeddings)
     each_index_array = list(zip(*data))
-    each_index_array = list(map(statistics.mean,each_index_array))
+    each_index_array = list(map(statistics.mean, each_index_array))
     each_index_array = np.array(each_index_array)
 
     return each_index_array
 
-# Given a word and an embedding dictionary, return an embedding vector representing the word 
+# Dada una palabra y un diccionario, devuelve un vector representando la palabra 
 def token_to_embedding(word, embeddings):
     if word in embeddings.keys():
         return embeddings.get(word)
