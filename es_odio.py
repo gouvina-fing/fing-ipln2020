@@ -21,9 +21,9 @@ import util.const as const
 import trainer as trainer
 from model import Model
 
-#
+# Parametros de solucion a entrenar
 best_solution = {
-    'vectorization': const.VECTORIZERS['features'],
+    'vectorization': const.VECTORIZERS['embeddings'],
     'model': 'mlp_classifier',
     'params': {
         'activation': 'relu',
@@ -48,7 +48,7 @@ def read_input():
         test_files.append(test_file)
     return data_path, test_files
 
-# 
+# Corrida de test con un modelo
 def run_test(model, path, test_file):
     
     # Lectura de conjunto de test

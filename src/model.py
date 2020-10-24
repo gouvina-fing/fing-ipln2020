@@ -147,13 +147,13 @@ class Model():
             elif self.model == 'mlp_classifier':
                 self.classifier = MLPClassifier(hidden_layer_sizes=(100, 100), max_iter=2000, solver='sgd')
 
-        # Train using dataset
+        # Entrenar usando dataset
         tic = time.time()
         self.classifier.fit(self.dataset, self.categories)
         toc = time.time()
         print('(MODEL) Model trained in ' + '{0:.2f}'.format(toc - tic) + ' seconds')
 
-        # Show best hyper parameters for the model
+        # Mostrar mejores hiperparametros para cada modelo
         if grid_search:
             print(f'(MODEL) Best estimator for {self.model}:')
             print(self.classifier.best_estimator_)            
@@ -169,14 +169,14 @@ class Model():
     # Predecir clasificacion para conjunto X
     def predict(self, X):
         
-        # Vectorize text
+        # Vectorizar texto
         examples = self.vectorizer.transform(X)
 
         if self.vectorization == const.VECTORIZERS['embeddings']:
             examples = np.array(examples['texto'], dtype=object)
             examples = list(map(lambda a: np.zeros(300) if len(a) != 300 else a,examples))
 
-        # Generate classification and probabilities for every class
+        # Generar clasificacion y probabilidades para cada clase
         prediction = self.classifier.predict(examples)
 
         return prediction
