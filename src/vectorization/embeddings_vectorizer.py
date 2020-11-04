@@ -16,8 +16,7 @@ import util.const as const
 
 # Dada una lista de tweets y un diccionario, devuelve lista de tweets vectorizados
 def get_vectors(tweets, dictionary):
-    # aux = tweets['texto'].apply(convert_tweet_to_embedding, embeddings=dictionary)
-
+    #aux = tweets['texto'].apply(convert_tweet_to_embedding, embeddings=dictionary)
     tweets['texto'] = tweets['texto'].apply(convert_tweet_to_embedding, embeddings=dictionary)
     return tweets
 
@@ -68,7 +67,7 @@ def mean_of_tweet_embedding(words, embeddings):
     data = pd.Series(words)
     data = data.apply(token_to_embedding, embeddings=embeddings)
     each_index_array = list(zip(*data))
-    each_index_array[0] = np.zeros(1)
+    each_index_array[0] = each_index_array[1]
     each_index_array = list(map(statistics.mean, each_index_array))
     each_index_array = np.array(each_index_array)
 

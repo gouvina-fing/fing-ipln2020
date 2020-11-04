@@ -75,7 +75,7 @@ class Model():
         self.classifier = pickle.load(open(const.MODEL_FOLDER + const.MODEL_FILE, 'rb'))
 
     # Constructor
-    def __init__(self, vectorization=const.VECTORIZERS['features'], model='mlp_classifier', data_path=const.DATA_FOLDER, params={}):
+    def __init__(self, vectorization=const.VECTORIZERS['embeddings'], model='mlp_classifier', data_path=const.DATA_FOLDER, params={}):
 
         # Dataset vacio para entrenar
         self.dataset = None

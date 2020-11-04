@@ -53,9 +53,9 @@ def run_test(model, path, test_file):
     
     # Lectura de conjunto de test
     df_test = pd.read_csv(path + test_file, sep='|', engine='python', quotechar='"', error_bad_lines=False)
-    
+
     # Ejecucion de modelo sobre conjunto de test
-    predictions = model.predict(df_test['texto'].values.astype('U'))
+    predictions = model.predict(df_test)
 
     # Generacion y muestra de metricas
     accuracy = accuracy_score(df_test['odio'].values, predictions)
@@ -92,7 +92,8 @@ def main():
     # Creacion y entrenamiento de modelo
     model = Model(data_path=data_path, params=best_solution)
     model.train()
-
+    model.save()
+    
     # Ejecucion de modelo sobre cada archivo de test
     for test_file in test_files:
         run_test(model, data_path, test_file)

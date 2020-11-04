@@ -22,7 +22,7 @@ MODEL_FILE = "/model.sav"
 # TIPOS
 # ---------------------------------------------------------------
 
-MODELS = ['svm', 'tree', 'nb', 'knn', 'mlp_classifier']
+MODELS = ['svm', 'tree', 'knn', 'mlp_classifier']
 VECTORIZERS = {
     'features': 1,
     'embeddings': 2,
