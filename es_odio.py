@@ -22,7 +22,7 @@ import trainer as trainer
 from model import Model
 
 # Parametros de solucion a entrenar
-best_solution = {
+'''best_solution = {
     'vectorization': const.VECTORIZERS['embeddings'],
     'model': 'mlp_classifier',
     'params': {
@@ -32,6 +32,12 @@ best_solution = {
         'learning_rate': 'adaptive',
         'max_iter': 1000,
         'solver': 'adam'
+    }
+}'''
+best_solution = {
+    'vectorization': const.VECTORIZERS['embeddings'],
+    'model': 'knn',
+    'params': {
     }
 }
 
