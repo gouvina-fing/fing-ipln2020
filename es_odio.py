@@ -17,13 +17,12 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 
 # DEPENDENCIAS (Locales)
 # ----------------------------------------------------------------------------------------------------
-import util.const as const
-import trainer as trainer
-from model import Model
+import src.modules.const as const
+from src.modules.model import Model
+import src.trainer as trainer
 
 # Parametros de solucion a entrenar
 '''best_solution = {
-    'vectorization': const.VECTORIZERS['embeddings'],
     'model': 'mlp_classifier',
     'params': {
         'activation': 'relu',
@@ -35,7 +34,6 @@ from model import Model
     }
 }'''
 best_solution = {
-    'vectorization': const.VECTORIZERS['embeddings'],
     'model': 'knn',
     'params': {
     }

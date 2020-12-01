@@ -2,5 +2,3 @@ numpy
 scikit-learn
 pandas
 tokenizer
-tensorflow
-keras

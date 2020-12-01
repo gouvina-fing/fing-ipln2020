@@ -2,10 +2,11 @@
 # ----------------------------------------------------------------------------------------------------
 import os
 import sys
+import pandas as pd
 
 # DEPENDENCIAS (Locales)
 # ----------------------------------------------------------------------------------------------------
-from model import Model
+from modules.model import Model
 
 # FUNCIONES PRINCIPALES
 # ----------------------------------------------------------------------------------------------------
@@ -31,7 +32,8 @@ if __name__ == "__main__":
 
     # 1. Obtener texto de parametro
     text = sys.argv[1]
-    texts = [text]
+    texts = pd.DataFrame(columns=['texto'])
+    texts = texts.append({ 'texto': text}, ignore_index=True)
 
     # 2. Predecir categoria
     main_prediction = predict(texts)
