@@ -78,22 +78,12 @@ def get_parameter_space(model):
                 'metric': 'euclidean'
             },
             {
-                'n_neighbors': 7,
-                'weights': 'uniform',
-                'metric': 'euclidean'
-            },
-            {
                 'n_neighbors': 3,
                 'weights': 'distance',
                 'metric': 'euclidean'
             },
             {
                 'n_neighbors': 5,
-                'weights': 'distance',
-                'metric': 'euclidean'
-            },
-            {
-                'n_neighbors': 7,
                 'weights': 'distance',
                 'metric': 'euclidean'
             },
@@ -108,22 +98,12 @@ def get_parameter_space(model):
                 'metric': 'manhattan'
             },
             {
-                'n_neighbors': 7,
-                'weights': 'uniform',
-                'metric': 'manhattan'
-            },
-            {
                 'n_neighbors': 3,
                 'weights': 'distance',
                 'metric': 'manhattan'
             },
             {
                 'n_neighbors': 5,
-                'weights': 'distance',
-                'metric': 'manhattan'
-            },
-            {
-                'n_neighbors': 7,
                 'weights': 'distance',
                 'metric': 'manhattan'
             },
@@ -148,7 +128,7 @@ def get_parameter_space(model):
                 'learning_rate': 'constant'
             },
             {
-                'hidden_layer_sizes': (50,50,50),
+                'hidden_layer_sizes': (100,100,100),
                 'max_iter': 2000,
                 'activation': 'relu',
                 'solver': 'sgd',
@@ -172,7 +152,7 @@ def get_parameter_space(model):
                 'learning_rate': 'constant'
             },
             {
-                'hidden_layer_sizes': (50,50,50),
+                'hidden_layer_sizes': (100,100,100),
                 'max_iter': 2000,
                 'activation': 'logistic',
                 'solver': 'sgd',
@@ -182,28 +162,99 @@ def get_parameter_space(model):
             {
                 'hidden_layer_sizes': (100,),
                 'max_iter': 2000,
-                'activation': 'relu',
+                'activation': 'logistic',
                 'solver': 'sgd',
                 'alpha': 0.05,
-                'learning_rate': 'adaptative'
+                'learning_rate': 'constant'
+            },
+            {
+                'hidden_layer_sizes': (100,100),
+                'max_iter': 2000,
+                'activation': 'logistic',
+                'solver': 'sgd',
+                'alpha': 0.05,
+                'learning_rate': 'constant'
+            },
+            {
+                'hidden_layer_sizes': (100,100,100),
+                'max_iter': 2000,
+                'activation': 'logistic',
+                'solver': 'sgd',
+                'alpha': 0.05,
+                'learning_rate': 'constant'
+            },
+            {
+                'hidden_layer_sizes': (100,),
+                'max_iter': 2000,
+                'activation': 'relu',
+                'solver': 'adam',
+                'alpha': 0.05,
+                'learning_rate': 'constant'
             },
             {
                 'hidden_layer_sizes': (100,100),
                 'max_iter': 2000,
                 'activation': 'relu',
-                'solver': 'sgd',
+                'solver': 'adam',
                 'alpha': 0.05,
-                'learning_rate': 'adaptative'
+                'learning_rate': 'constant'
             },
             {
-                'hidden_layer_sizes': (50,50,50),
+                'hidden_layer_sizes': (100,100,100),
                 'max_iter': 2000,
                 'activation': 'relu',
-                'solver': 'sgd',
+                'solver': 'adam',
                 'alpha': 0.05,
-                'learning_rate': 'adaptative'
+                'learning_rate': 'constant'
             },
-
+            {
+                'hidden_layer_sizes': (100,),
+                'max_iter': 2000,
+                'activation': 'relu',
+                'solver': 'adam',
+                'alpha': 0.05,
+                'learning_rate': 'adaptive'
+            },
+            {
+                'hidden_layer_sizes': (100,100),
+                'max_iter': 2000,
+                'activation': 'relu',
+                'solver': 'adam',
+                'alpha': 0.05,
+                'learning_rate': 'adaptive'
+            },
+            {
+                'hidden_layer_sizes': (100,100,100),
+                'max_iter': 2000,
+                'activation': 'relu',
+                'solver': 'adam',
+                'alpha': 0.05,
+                'learning_rate': 'adaptive'
+            },
+            {
+                'hidden_layer_sizes': (100,),
+                'max_iter': 2000,
+                'activation': 'logistic',
+                'solver': 'adam',
+                'alpha': 0.05,
+                'learning_rate': 'adaptive'
+            },
+            {
+                'hidden_layer_sizes': (100,100),
+                'max_iter': 2000,
+                'activation': 'logistic',
+                'solver': 'adam',
+                'alpha': 0.05,
+                'learning_rate': 'adaptive'
+            },
+            {
+                'hidden_layer_sizes': (100,100,100),
+                'max_iter': 2000,
+                'activation': 'logistic',
+                'solver': 'adam',
+                'alpha': 0.05,
+                'learning_rate': 'adaptive'
+            },
         ]
 
     return parameter_space

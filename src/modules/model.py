@@ -112,13 +112,13 @@ class Model():
         # Si no hay parámetros en el modelo, usar genéricos
         else:
             if self.model == 'svm':
-                self.classifier = SVC(gamma='auto')
+                self.classifier = SVC(kernel='linear', C=10)
             elif self.model == 'tree':
-                self.classifier = DecisionTreeClassifier(max_depth=5)
+                self.classifier = DecisionTreeClassifier(criterion='entropy', max_depth=8)
             elif self.model == 'knn':
-                self.classifier = KNeighborsClassifier(5)
+                self.classifier = KNeighborsClassifier(3)
             elif self.model == 'mlp_classifier':
-                self.classifier = MLPClassifier(hidden_layer_sizes=(100, 100), max_iter=2000, solver='sgd')
+                self.classifier = MLPClassifier(hidden_layer_sizes=(100,), activation='relu', 'alpha'=0.05, learning_rate: 'adaptive', solver='adam',  max_iter=2000)
 
         # Entrenar usando dataset
         tic = time.time()

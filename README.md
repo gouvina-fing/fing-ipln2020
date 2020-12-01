@@ -12,11 +12,11 @@ A continuación una breve descripción de componentes necesarios para la ejecuci
 
 ### 2.1. Dependencias
 Se utilizó Python v3.8.6 como lenguaje de programación y se emplearon las siguientes bibliotecas:
-- sckit-learn v0.21.3
-- pandas v0.25.2
-- numpy v1.8.2
-- pickle v4.0
-- tokenizer v1.4.0
+- `sckit-learn v0.21.3`
+- `pandas v0.25.2`
+- `numpy v1.8.2`
+- `pickle v4.0`
+- `tokenizer v1.4.0`
 
 ### 2.2. Pasos
 Los pasos para la ejecución del programa son los siguientes:
@@ -64,6 +64,10 @@ Se implementó una lista de modelos genéricos de problemas de aprendizaje autom
 
 Para los 4 modelos se variaron distintos hiperparámetros con el fin de determinar la mejor configuración paramétrica para cada uno. En el módulo `evaluate.py` pueden consultarse dichos parámetros y al correr el mismo se exploran las métricas resultantes de entrenar el modelo con cada combinación.
 
+Se destaca que hubo que dejar de lado múltiples modelos que se quería explorar, por problemas de diseño del vectorizado así como otras dificultades con bibliotecas. Particularmente, no se pudo implementar **Naive Bayes** ni redes neuronales del tipo **RNN** o **CNN**.
+
+También es importante mencionar que debido a la implementación utilizada de los modelos, no se pudo dar uso al conjunto de validación.
+
 ### 3.3. Arquitectura general
 La solución se diseño separando el código en 3 grupos:
 - Carpeta raíz, donde se encuentra el script `es_odio.py`, así como arhcivos de configuración y carpetas con conjuntos de datos y modelos.
@@ -71,7 +75,84 @@ La solución se diseño separando el código en 3 grupos:
 - Carpeta `src/modules` donde se encuentran los módulos `const.py` (archivo auxiliar de constantes), `model.py` (archivo que representa un modelo en cuestión) y `vectorizer.py` (archivo encargado de realizar la vectorización).
 
 ## 4. Experimentación
-A
+Utilizando la salida del módulo `evaluate.py` se corrieron múltiples configuraciones paramétricas para distintos modelos.
+
+Cabe destacar que las métricas resultantes fueron muy similares para la mayoría de los mismos, pero se adjuntan las tablas de cada uno de igual forma. Dichas tablas están ordenadas de mayor a menor según el _F1 Score_ obtenido.
+
+Las métricas son:
+
+**SVM:**
+Parámetros | Accuracy | Precision | Recall | F1 Score
+--- | --- | --- | --- | ---
+Kernel: Linear <br> C: 10 | 0.68 | 0.69 | 0.68 | 0.68
+Kernel: Linear <br> C: 1 | 0.65 | 0.65 | 0.65 | 0.64
+Kernel: RBF <br> Gamma: auto <br> C: 10 | 0.57 | 0.57 | 0.62 | 0.52
+Kernel: RBF <br> Gamma: auto <br> C: 1 | 0.50 | 0.25 | 0.50 | 0.33
+
+<br>
+
+**Decision Tree:**
+Parámetros | Accuracy | Precision | Recall | F1 Score
+--- | --- | --- | --- | ---
+Criterion: Entropy <br> Max Depth: 8 | 0.59 | 0.59 | 0.59 | 0.59
+Criterion: Entropy <br> Max Depth: 4 | 0.58 | 0.59 | 0.60 | 0.58
+Criterion: Entropy <br> Max Depth: 12 | 0.56 | 0.56 | 0.56 | 0.56
+Criterion: Gini <br> Max Depth: 12 | 0.56 | 0.56 | 0.56 | 0.56
+Criterion: Gini <br> Max Depth: 4 | 0.56 | 0.56 | 0.56 | 0.55
+Criterion: Gini <br> Max Depth: 8 | 0.55 | 0.55 | 0.55 | 0.55
+
+<br>
+
+**KNN:**
+Parámetros | Accuracy | Precision | Recall | F1 Score
+--- | --- | --- | --- | ---
+Neighbors: 3 <br> Weights: Distance <br> Metric: Manhattan | 0.62 | 0.62 | 0.62 | 0.62
+Neighbors: 3 <br> Weights: Uniform <br> Metric: Manhattan | 0.62 | 0.62 | 0.61 | 0.61
+Neighbors: 3 <br> Weights: Distance <br> Metric: Euclidean | 0.61 | 0.60 | 0.60 | 0.61
+Neighbors: 3 <br> Weights: Uniform <br> Metric: Euclidean | 0.61 | 0.61 | 0.59 | 0.60
+Neighbors: 5 <br> Weights: Distance <br> Metric: Manhattan | 0.60 | 0.61 | 0.59 | 0.60
+Neighbors: 5 <br> Weights: Uniform <br> Metric: Manhattan | 0.60 | 0.61 | 0.59 | 0.60
+Neighbors: 5 <br> Weights: Distance <br> Metric: Euclidean | 0.59 | 0.59 | 0.60 | 0.59
+Neighbors: 5 <br> Weights: Uniform <br> Metric: Euclidean | 0.59 | 0.59 | 0.59 | 0.59
+
+<br>
+
+**MLP:**
+Parámetros | Accuracy | Precision | Recall | F1 Score
+--- | --- | --- | --- | ---
+Hidden Layers: 1 x 100 <br> Activation: ReLU <br> Solver: Adam <br> Alpha: 0.05 <br> Learning Rate: Adaptive | 0.69 | 0.69 | 0.69 | 0.69
+Hidden Layers: 1 x 100 <br> Activation: ReLU <br> Solver: Adam <br> Alpha: 0.05 <br> Learning Rate: Constant | 0.69 | 0.69 | 0.69 | 0.69
+Hidden Layers: 2 x 100 <br> Activation: Logistic <br> Solver: Adam <br> Alpha: 0.05 <br> Learning Rate: Adaptive | 0.67 | 0.67 | 0.67 | 0.67
+Hidden Layers: 2 x 100 <br> Activation: ReLU <br> Solver: Adam <br> Alpha: 0.05 <br> Learning Rate: Adaptive | 0.67 | 0.67 | 0.67 | 0.67
+Hidden Layers: 2 x 100 <br> Activation: ReLU <br> Solver: Adam <br> Alpha: 0.05 <br> Learning Rate: Constant | 0.67 | 0.67 | 0.67 | 0.67
+Hidden Layers: 3 x 100 <br> Activation: ReLU <br> Solver: Adam <br> Alpha: 0.05 <br> Learning Rate: Adaptive | 0.66 | 0.66 | 0.66 | 0.66
+Hidden Layers: 1 x 100 <br> Activation: Logistic <br> Solver: Adam <br> Alpha: 0.05 <br> Learning Rate: Adaptive | 0.66 | 0.67 | 0.66 | 0.66
+Hidden Layers: 3 x 100 <br> Activation: ReLU <br> Solver: Adam <br> Alpha: 0.05 <br> Learning Rate: Constant | 0.64 | 0.64 | 0.64 | 0.64
+Hidden Layers: 1 x 100 <br> Activation: Logistic <br> Solver: SGD <br> Alpha: 0.0001 <br> Learning Rate: Constant | 0.50 | 0.51 | 0.50 | 0.39
+Hidden Layers: 2 x 100 <br> Activation: ReLu <br> Solver: SGD <br> Alpha: 0.0001 <br> Learning Rate: Constant | 0.50 | 0.50 | 0.50 | 0.34
+Hidden Layers: 3 x 100 <br> Activation: ReLu <br> Solver: SGD <br> Alpha: 0.0001 <br> Learning Rate: Constant | 0.50 | 0.25 | 0.50 | 0.33
+Hidden Layers: 1 x 100 <br> Activation: Logistic <br> Solver: SGD <br> Alpha: 0.0001 <br> Learning Rate: Constant | 0.50 | 0.25 | 0.50 | 0.33
+Hidden Layers: 2 x 100 <br> Activation: Logistic <br> Solver: SGD <br> Alpha: 0.0001 <br> Learning Rate: Constant | 0.50 | 0.25 | 0.50 | 0.33
+Hidden Layers: 3 x 100 <br> Activation: Logistic <br> Solver: SGD <br> Alpha: 0.0001 <br> Learning Rate: Constant | 0.50 | 0.25 | 0.50 | 0.33
+Hidden Layers: 1 x 100 <br> Activation: Logistic <br> Solver: SGD <br> Alpha: 0.05 <br> Learning Rate: Constant | 0.50 | 0.25 | 0.50 | 0.33
+Hidden Layers: 2 x 100 <br> Activation: Logistic <br> Solver: SGD <br> Alpha: 0.05 <br> Learning Rate: Constant | 0.50 | 0.25 | 0.50 | 0.33
+Hidden Layers: 3 x 100 <br> Activation: Logistic <br> Solver: SGD <br> Alpha: 0.05 <br> Learning Rate: Constant | 0.50 | 0.25 | 0.50 | 0.33
+Hidden Layers: 3 x 100 <br> Activation: Logistic <br> Solver: SGD <br> Alpha: 0.05 <br> Learning Rate: Adaptive | 0.50 | 0.25 | 0.50 | 0.33
+
+<br>
+
+Tomando el mejor resultado de cada modelo, se observa la siguiente tabla:
+
+Modelo | Accuracy | Precision | Recall | F1 Score
+--- | --- | --- | --- | ---
+MLP | 0.69 | 0.69 | 0.69 | 0.69
+SVM | 0.68 | 0.69 | 0.68 | 0.68
+KNN | 0.62 | 0.62 | 0.62 | 0.62
+Tree | 0.59 | 0.59 | 0.59 | 0.59
+
+<br>
+
+Como apreciación general, se observa que la red neuronal MLP ofrece mejores resultados, particularmente al usar solver _adam_ con un ratio de aprendizaje adaptativo.
 
 ## 5. Observaciones y Conclusiones
 Respecto a los resultados obtenidos y al trabajo en general, se observa lo siguiente:

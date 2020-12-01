@@ -22,20 +22,15 @@ from src.modules.model import Model
 import src.trainer as trainer
 
 # Parametros de solucion a entrenar
-'''best_solution = {
+best_solution = {
     'model': 'mlp_classifier',
     'params': {
         'activation': 'relu',
-        'alpha': 0.0001,
-        'hidden_layer_sizes': (50, 100, 50),
+        'alpha': 0.05,
+        'hidden_layer_sizes': (200,),
         'learning_rate': 'adaptive',
-        'max_iter': 1000,
+        'max_iter': 2000,
         'solver': 'adam'
-    }
-}'''
-best_solution = {
-    'model': 'knn',
-    'params': {
     }
 }
 
