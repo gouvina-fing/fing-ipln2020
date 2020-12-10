@@ -51,7 +51,8 @@ def read_input():
 def run_test(model, path, test_file):
     
     # Lectura de conjunto de test
-    df_test = pd.read_csv(path + test_file, sep='|', engine='python', quotechar='"', error_bad_lines=False)
+    df_test = pd.read_csv(path + test_file, sep='\t', engine='python', quotechar='"', error_bad_lines=False)
+    df_test.columns = ['texto', 'odio']
 
     # Ejecucion de modelo sobre conjunto de test
     predictions = model.predict(df_test)

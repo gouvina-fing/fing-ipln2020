@@ -26,7 +26,8 @@ class Model():
     def read_dataset(self):
 
         # Leer dataset en pandas dataframe
-        df = pd.read_csv(self.data_path + const.DATA_TRAIN_FILE, sep='|', engine='python', quotechar='"', error_bad_lines=False)
+        df = pd.read_csv(self.data_path + const.DATA_TRAIN_FILE, sep='\t', engine='python', quotechar='"', error_bad_lines=False)
+        df.columns = ['texto', 'odio']
 
         # Mezclar dataset aleatoriamente
         df = df.sample(frac=1)
@@ -37,7 +38,8 @@ class Model():
         self.categories = df['odio'].values
 
         # Read testset as Pandas DataFrame
-        df_test = pd.read_csv(self.data_path + const.DATA_TEST_FILE, sep='|', engine='python', quotechar='"', error_bad_lines=False)
+        df_test = pd.read_csv(self.data_path + const.DATA_TEST_FILE, sep='\t', engine='python', quotechar='"', error_bad_lines=False)
+        df_test.columns = ['texto', 'odio']
 
         # Mezclar testset aleatoriamente
         df_test = df_test.sample(frac=1)
@@ -118,7 +120,7 @@ class Model():
             elif self.model == 'knn':
                 self.classifier = KNeighborsClassifier(3)
             elif self.model == 'mlp_classifier':
-                self.classifier = MLPClassifier(hidden_layer_sizes=(100,), activation='relu', 'alpha'=0.05, learning_rate: 'adaptive', solver='adam',  max_iter=2000)
+                self.classifier = MLPClassifier(hidden_layer_sizes=(100,), activation='relu', alpha=0.05, solver='adam',  max_iter=2000)
 
         # Entrenar usando dataset
         tic = time.time()

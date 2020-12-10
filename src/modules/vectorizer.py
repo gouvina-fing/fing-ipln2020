@@ -25,7 +25,7 @@ class Vectorizer():
 
         # Lectura de archivo de embeddings como pandas DataFrame
         tic = time.time()
-        df_test = pd.read_csv(const.DATA_FOLDER + const.EMBEDDINGS_FILE, engine='python', sep='\s+', header=None) 
+        df_test = pd.read_csv(const.DATA_FOLDER + const.EMBEDDINGS_FILE, engine='python', sep='\s+', header=None)
         toc = time.time()
         print('(VECTORIZER) Embeddings dictionary loaded in ' + '{0:.2f}'.format(toc - tic) + ' seconds')
 
