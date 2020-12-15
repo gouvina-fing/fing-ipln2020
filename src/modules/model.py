@@ -26,7 +26,7 @@ class Model():
     def read_dataset(self):
 
         # Leer dataset en pandas dataframe
-        df = pd.read_csv(self.data_path + const.DATA_TRAIN_FILE, sep='\t', engine='python', quotechar='"', error_bad_lines=False)
+        df = pd.read_csv(self.data_path + const.DATA_TRAIN_FILE, sep='\t', engine='python', quotechar='"', header=None, error_bad_lines=False)
         df.columns = ['texto', 'odio']
 
         # Mezclar dataset aleatoriamente
@@ -38,7 +38,7 @@ class Model():
         self.categories = df['odio'].values
 
         # Read testset as Pandas DataFrame
-        df_test = pd.read_csv(self.data_path + const.DATA_TEST_FILE, sep='\t', engine='python', quotechar='"', error_bad_lines=False)
+        df_test = pd.read_csv(self.data_path + const.DATA_TEST_FILE, sep='\t', engine='python', quotechar='"', header=None, error_bad_lines=False)
         df_test.columns = ['texto', 'odio']
 
         # Mezclar testset aleatoriamente

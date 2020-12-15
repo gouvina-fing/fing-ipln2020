@@ -12,6 +12,7 @@
 # ----------------------------------------------------------------------------------------------------
 import sys, os
 sys.path.append(f'{os.getcwd()}/src/') # Para poder separar el código en carpeta ./src
+import csv
 import pandas as pd
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
@@ -51,7 +52,7 @@ def read_input():
 def run_test(model, path, test_file):
     
     # Lectura de conjunto de test
-    df_test = pd.read_csv(path + test_file, sep='\t', engine='python', quotechar='"', error_bad_lines=False)
+    df_test = pd.read_csv(path + test_file, sep='\t', engine='python', quotechar='"', header=None, error_bad_lines=False)
     df_test.columns = ['texto', 'odio']
 
     # Ejecucion de modelo sobre conjunto de test
@@ -77,7 +78,7 @@ def run_test(model, path, test_file):
     print()
 
     # Guardado de resultados en archivo de salida
-    f = open(f"{test_file.replace('.csv', '')}.out", "a")
+    f = open(f"{test_file.replace('.csv', '')}.out", "w")
     for pred in predictions[:-1]:
         f.write(f"{pred}\n")
     f.write(f"{predictions[-1]}")
